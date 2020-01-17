@@ -119,7 +119,9 @@ under the License.
             <artifactId>maven-invoker-plugin</artifactId>
             <configuration>
               <projectsDirectory>src/it/projects</projectsDirectory>
-              <pomIncludes>*</pomIncludes>
+              <pomIncludes>
+                <include>*</include>
+              </pomIncludes>
             </configuration>
           </plugin>
         </plugins>
