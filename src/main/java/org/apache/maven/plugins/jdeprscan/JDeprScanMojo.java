@@ -22,6 +22,7 @@ package org.apache.maven.plugins.jdeprscan;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -59,6 +60,6 @@ public class JDeprScanMojo extends BaseJDeprScanMojo
             classPath.add( Paths.get( elm ) );
         }
 
-        return classPath;
+        return Collections.unmodifiableSet( classPath );
     }
 }
