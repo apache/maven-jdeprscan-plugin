@@ -269,15 +269,7 @@ public abstract class AbstractJDeprScanMojo
                         tc = tcs.get( tcs.size() - 1 );
                     }
                 }
-                catch ( ReflectiveOperationException e )
-                {
-                    // ignore
-                }
-                catch ( SecurityException e )
-                {
-                    // ignore
-                }
-                catch ( IllegalArgumentException e )
+                catch ( ReflectiveOperationException | SecurityException | IllegalArgumentException e )
                 {
                     // ignore
                 }

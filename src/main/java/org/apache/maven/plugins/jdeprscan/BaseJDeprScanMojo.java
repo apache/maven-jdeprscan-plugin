@@ -66,7 +66,7 @@ public abstract class BaseJDeprScanMojo extends AbstractJDeprScanMojo
     @Parameter
     private String release;
     
-    private JDeprScanConsumer consumer = new JDeprScanConsumer();
+    private final JDeprScanConsumer consumer = new JDeprScanConsumer();
     
     @Override
     public void execute()

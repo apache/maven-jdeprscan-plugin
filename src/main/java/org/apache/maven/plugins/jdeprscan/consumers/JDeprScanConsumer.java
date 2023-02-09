@@ -78,12 +78,7 @@ public class JDeprScanConsumer
             return;
         }
 
-        Set<String> dm = deprecatedMethods.get( matcher.group( 1 ) );
-        if ( dm == null )
-        {
-            dm = new HashSet<>();
-            deprecatedMethods.put( matcher.group( 1 ), dm );
-        }
+        Set<String> dm = deprecatedMethods.computeIfAbsent( matcher.group( 1 ), k -> new HashSet<>() );
         dm.add( matcher.group( 2 ) );
     }
 }
