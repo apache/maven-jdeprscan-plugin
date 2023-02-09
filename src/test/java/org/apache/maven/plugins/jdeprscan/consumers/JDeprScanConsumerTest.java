@@ -21,21 +21,21 @@ package org.apache.maven.plugins.jdeprscan.consumers;
 import java.util.Collections;
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JDeprScanConsumerTest {
     private JDeprScanConsumer consumer;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         consumer = new JDeprScanConsumer();
     }
 
     @Test
-    public void testDeprecatedClass() {
+    void testDeprecatedClass() {
         consumer.consumeLine("class o/a/m/p/j/its/Deprecations uses deprecated class java/rmi/RMISecurityManager ");
 
         assertEquals(consumer.getDeprecatedClasses().size(), 1);
@@ -46,7 +46,7 @@ public class JDeprScanConsumerTest {
     }
 
     @Test
-    public void testDeprecatedMethod() {
+    void testDeprecatedMethod() {
         consumer.consumeLine("class o/a/m/p/j/its/Deprecations uses deprecated method java/lang/Boolean::<init>(Z)V");
 
         assertEquals(consumer.getDeprecatedClasses().size(), 0);
