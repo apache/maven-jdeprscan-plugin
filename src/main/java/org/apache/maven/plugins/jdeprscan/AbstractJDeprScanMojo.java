@@ -251,7 +251,7 @@ public abstract class AbstractJDeprScanMojo
 
             if ( tc == null )
             {
-                // Maven 3.2.6 has plugin execution scoped Toolchain Support
+                // Maven 3.3.0 has plugin execution scoped Toolchain Support
                 try
                 {
                     Method getToolchainsMethod =
