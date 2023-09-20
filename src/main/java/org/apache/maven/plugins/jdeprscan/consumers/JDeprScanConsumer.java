@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.jdeprscan.consumers;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.jdeprscan.consumers;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.jdeprscan.consumers;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,53 +31,45 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
 
 /**
  * Consumes output of jdeprscan tool
- * 
+ *
  * @author Robert Scholte
  * @since 3.0.0
  */
-public class JDeprScanConsumer
-    extends CommandLineUtils.StringStreamConsumer
-    implements StreamConsumer
-{
+public class JDeprScanConsumer extends CommandLineUtils.StringStreamConsumer implements StreamConsumer {
 
     private final Map<String, Set<String>> deprecatedClasses = new HashMap<>();
 
     private final Map<String, Set<String>> deprecatedMethods = new HashMap<>();
 
-    public static final Pattern DEPRECATED_CLASS = Pattern.compile( "^class (\\S+) uses deprecated class (\\S+)" );
+    public static final Pattern DEPRECATED_CLASS = Pattern.compile("^class (\\S+) uses deprecated class (\\S+)");
 
-    public static final Pattern DEPRECATED_METHOD = Pattern.compile( "^class (\\S+) uses deprecated method (\\S+)" );
+    public static final Pattern DEPRECATED_METHOD = Pattern.compile("^class (\\S+) uses deprecated method (\\S+)");
 
-    public Map<String, Set<String>> getDeprecatedClasses( )
-    {
-        return Collections.unmodifiableMap( deprecatedClasses );
+    public Map<String, Set<String>> getDeprecatedClasses() {
+        return Collections.unmodifiableMap(deprecatedClasses);
     }
 
-    public Map<String, Set<String>> getDeprecatedMethods( )
-    {
-        return Collections.unmodifiableMap( deprecatedMethods );
+    public Map<String, Set<String>> getDeprecatedMethods() {
+        return Collections.unmodifiableMap(deprecatedMethods);
     }
 
     @Override
-    public void consumeLine( String line )
-    {
-        super.consumeLine( line );
+    public void consumeLine(String line) {
+        super.consumeLine(line);
 
-        Matcher deprecatedClassMatcher = DEPRECATED_CLASS.matcher( line );
-        matcherCollector( deprecatedClassMatcher, deprecatedClasses );
+        Matcher deprecatedClassMatcher = DEPRECATED_CLASS.matcher(line);
+        matcherCollector(deprecatedClassMatcher, deprecatedClasses);
 
-        Matcher deprecatedMethodMatcher = DEPRECATED_METHOD.matcher( line );
-        matcherCollector( deprecatedMethodMatcher, deprecatedMethods );
+        Matcher deprecatedMethodMatcher = DEPRECATED_METHOD.matcher(line);
+        matcherCollector(deprecatedMethodMatcher, deprecatedMethods);
     }
 
-    private void matcherCollector( Matcher matcher, Map<String, Set<String>> deprecatedMethods )
-    {
-        if ( !matcher.find() )
-        {
+    private void matcherCollector(Matcher matcher, Map<String, Set<String>> deprecatedMethods) {
+        if (!matcher.find()) {
             return;
         }
 
-        Set<String> dm = deprecatedMethods.computeIfAbsent( matcher.group( 1 ), k -> new HashSet<>() );
-        dm.add( matcher.group( 2 ) );
+        Set<String> dm = deprecatedMethods.computeIfAbsent(matcher.group(1), k -> new HashSet<>());
+        dm.add(matcher.group(2));
     }
 }

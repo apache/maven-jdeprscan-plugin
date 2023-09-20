@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.jdeprscan;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.jdeprscan;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.jdeprscan;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -38,26 +37,25 @@ import org.codehaus.plexus.util.cli.Commandline;
 
 /**
  * Base class for all explicit jdeprscan mojos
- * 
+ *
  * @author Robert Scholte
  * @since 3.0.0
  */
-public abstract class BaseJDeprScanMojo extends AbstractJDeprScanMojo
-{
-    @Parameter( defaultValue = "${project}", readonly = true, required = true )
+public abstract class BaseJDeprScanMojo extends AbstractJDeprScanMojo {
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
     /**
      * Indicates whether the build will continue even if there are jdeprscan warnings.
      */
-    @Parameter( defaultValue = "true" )
+    @Parameter(defaultValue = "true")
     private boolean failOnWarning;
-    
+
     /**
-     * Limits scanning or listing to APIs that are deprecated for removal. 
+     * Limits scanning or listing to APIs that are deprecated for removal.
      * Can’t be used with a release value of 6, 7, or 8.
      */
-    @Parameter( property = "maven.jdeprscan.forremoval" )
+    @Parameter(property = "maven.jdeprscan.forremoval")
     private boolean forRemoval;
 
     /**
@@ -65,111 +63,93 @@ public abstract class BaseJDeprScanMojo extends AbstractJDeprScanMojo
      */
     @Parameter
     private String release;
-    
+
     private final JDeprScanConsumer consumer = new JDeprScanConsumer();
-    
+
     @Override
-    public void execute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        if ( !Files.exists( getClassesDirectory() ) )
-        {
-            getLog().debug( "No classes to scan" );
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        if (!Files.exists(getClassesDirectory())) {
+            getLog().debug("No classes to scan");
             return;
         }
         super.execute();
     }
 
-    protected MavenProject getProject()
-    {
+    protected MavenProject getProject() {
         return project;
     }
-    
+
     @Override
-    protected boolean isForRemoval()
-    {
+    protected boolean isForRemoval() {
         return forRemoval;
     }
-    
+
     @Override
-    protected StringStreamConsumer getConsumer()
-    {
+    protected StringStreamConsumer getConsumer() {
         return consumer;
     }
-    
+
     @Override
-    protected final void addJDeprScanOptions( Commandline cmd ) throws MojoFailureException
-    {
-        super.addJDeprScanOptions( cmd );
+    protected final void addJDeprScanOptions(Commandline cmd) throws MojoFailureException {
+        super.addJDeprScanOptions(cmd);
 
-        if ( release != null )
-        {
-            cmd.createArg().setValue( "--release" );
+        if (release != null) {
+            cmd.createArg().setValue("--release");
 
-            cmd.createArg().setValue( release );
+            cmd.createArg().setValue(release);
         }
 
-        try
-        {
+        try {
             Collection<Path> cp = getClassPath();
-            
-            if ( !cp.isEmpty() )
-            {
-                cmd.createArg().setValue( "--class-path" );
 
-                cmd.createArg().setValue( StringUtils.join( cp.iterator(), File.pathSeparator ) );
+            if (!cp.isEmpty()) {
+                cmd.createArg().setValue("--class-path");
+
+                cmd.createArg().setValue(StringUtils.join(cp.iterator(), File.pathSeparator));
             }
-            
+
+        } catch (DependencyResolutionRequiredException e) {
+            throw new MojoFailureException(e.getMessage(), e);
         }
-        catch ( DependencyResolutionRequiredException e )
-        {
-            throw new MojoFailureException( e.getMessage(), e );
-        }
-        
-        cmd.createArg().setFile( getClassesDirectory().toFile() );
+
+        cmd.createArg().setFile(getClassesDirectory().toFile());
     }
 
     @Override
-    protected void verify() throws MojoExecutionException
-    {
-        if ( !( consumer.getDeprecatedClasses().isEmpty() && consumer.getDeprecatedMethods().isEmpty() ) )
-        {
-            if ( !consumer.getDeprecatedClasses().isEmpty() )
-            {
-                getLog().warn( "Found usage of deprecated classes:" );
-                
-                for ( Map.Entry<String, Set<String>> classes : consumer.getDeprecatedClasses().entrySet() )
-                {
-                    getLog().warn( "class " + classes.getKey() + " uses deprecated class(es)" );
-                    for ( String deprClass : classes.getValue() )
-                    {
-                        getLog().warn( "  * " + deprClass );
+    protected void verify() throws MojoExecutionException {
+        if (!(consumer.getDeprecatedClasses().isEmpty()
+                && consumer.getDeprecatedMethods().isEmpty())) {
+            if (!consumer.getDeprecatedClasses().isEmpty()) {
+                getLog().warn("Found usage of deprecated classes:");
+
+                for (Map.Entry<String, Set<String>> classes :
+                        consumer.getDeprecatedClasses().entrySet()) {
+                    getLog().warn("class " + classes.getKey() + " uses deprecated class(es)");
+                    for (String deprClass : classes.getValue()) {
+                        getLog().warn("  * " + deprClass);
                     }
                 }
             }
-            
-            if ( !consumer.getDeprecatedMethods().isEmpty() )
-            {
-                getLog().warn( "Found usage of deprecated methods:" );
-                
-                for ( Map.Entry<String, Set<String>> classes : consumer.getDeprecatedMethods().entrySet() )
-                {
-                    getLog().warn( "class " + classes.getKey() + " uses deprecated method(s)" );
-                    for ( String deprMethod : classes.getValue() )
-                    {
-                        getLog().warn( "  * " + deprMethod );
+
+            if (!consumer.getDeprecatedMethods().isEmpty()) {
+                getLog().warn("Found usage of deprecated methods:");
+
+                for (Map.Entry<String, Set<String>> classes :
+                        consumer.getDeprecatedMethods().entrySet()) {
+                    getLog().warn("class " + classes.getKey() + " uses deprecated method(s)");
+                    for (String deprMethod : classes.getValue()) {
+                        getLog().warn("  * " + deprMethod);
                     }
                 }
             }
-            
-            if ( failOnWarning )
-            {
-                throw new MojoExecutionException( "JDeprScan detected usage of deprecated classes/methods" );
+
+            if (failOnWarning) {
+                throw new MojoExecutionException("JDeprScan detected usage of deprecated classes/methods");
             }
         }
     }
 
     protected abstract Path getClassesDirectory();
-    
+
     protected abstract Collection<Path> getClassPath() throws DependencyResolutionRequiredException;
 }
