@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.jdeprscan;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.jdeprscan;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.jdeprscan;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,33 +32,30 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
  * Scans main classes with jdeprscan tool
- * 
+ *
  * @author Robert Scholte
  * @since 3.0.0
  */
-@Mojo( name = "jdeprscan", 
-       requiresDependencyResolution = ResolutionScope.COMPILE,
-       defaultPhase = LifecyclePhase.PROCESS_CLASSES, 
-       threadSafe = true )
-public class JDeprScanMojo extends BaseJDeprScanMojo
-{
+@Mojo(
+        name = "jdeprscan",
+        requiresDependencyResolution = ResolutionScope.COMPILE,
+        defaultPhase = LifecyclePhase.PROCESS_CLASSES,
+        threadSafe = true)
+public class JDeprScanMojo extends BaseJDeprScanMojo {
     @Override
-    protected Path getClassesDirectory()
-    {
-        return Paths.get( getProject().getBuild().getOutputDirectory() );
+    protected Path getClassesDirectory() {
+        return Paths.get(getProject().getBuild().getOutputDirectory());
     }
-    
-    @Override
-    protected Collection<Path> getClassPath()
-        throws DependencyResolutionRequiredException
-    {
-        Set<Path> classPath = new LinkedHashSet<>( getProject().getCompileClasspathElements().size() );
 
-        for ( String elm : getProject().getCompileClasspathElements() )
-        {
-            classPath.add( Paths.get( elm ) );
+    @Override
+    protected Collection<Path> getClassPath() throws DependencyResolutionRequiredException {
+        Set<Path> classPath =
+                new LinkedHashSet<>(getProject().getCompileClasspathElements().size());
+
+        for (String elm : getProject().getCompileClasspathElements()) {
+            classPath.add(Paths.get(elm));
         }
 
-        return Collections.unmodifiableSet( classPath );
+        return Collections.unmodifiableSet(classPath);
     }
 }

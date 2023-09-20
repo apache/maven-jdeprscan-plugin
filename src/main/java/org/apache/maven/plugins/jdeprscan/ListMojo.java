@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.jdeprscan;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.jdeprscan;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.jdeprscan;
 
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -26,33 +25,28 @@ import org.codehaus.plexus.util.cli.Commandline;
 
 /**
  * Prints the set of deprecated APIs. No scanning is done.
- * 
+ *
  * @author Robert Scholte
  * @since 3.0.0
  */
-@Mojo( name = "list", requiresProject = false, requiresDirectInvocation = true )
-public class ListMojo
-    extends AbstractJDeprScanMojo
-{
+@Mojo(name = "list", requiresProject = false, requiresDirectInvocation = true)
+public class ListMojo extends AbstractJDeprScanMojo {
     /**
      * Limits scanning or listing to APIs that are deprecated for removal. Can’t be used with a release value of 6, 7,
      * or 8.
      */
-    @Parameter( property = "for-removal" )
+    @Parameter(property = "for-removal")
     private boolean forRemoval;
 
     @Override
-    protected boolean isForRemoval()
-    {
+    protected boolean isForRemoval() {
         return forRemoval;
     }
 
     @Override
-    protected void addJDeprScanOptions( Commandline cmd )
-        throws MojoFailureException
-    {
-        super.addJDeprScanOptions( cmd );
+    protected void addJDeprScanOptions(Commandline cmd) throws MojoFailureException {
+        super.addJDeprScanOptions(cmd);
 
-        cmd.createArg().setValue( "--list" );
+        cmd.createArg().setValue("--list");
     }
 }

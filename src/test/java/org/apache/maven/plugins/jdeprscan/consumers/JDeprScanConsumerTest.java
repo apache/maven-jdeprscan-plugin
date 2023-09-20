@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.jdeprscan.consumers;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,8 +16,7 @@ package org.apache.maven.plugins.jdeprscan.consumers;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import static org.junit.Assert.assertEquals;
+package org.apache.maven.plugins.jdeprscan.consumers;
 
 import java.util.Collections;
 import java.util.Set;
@@ -27,37 +24,35 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-public class JDeprScanConsumerTest
-{
+import static org.junit.Assert.assertEquals;
+
+public class JDeprScanConsumerTest {
     private JDeprScanConsumer consumer;
-    
+
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         consumer = new JDeprScanConsumer();
     }
 
     @Test
-    public void testDeprecatedClass()
-    {
-        consumer.consumeLine( "class o/a/m/p/j/its/Deprecations uses deprecated class java/rmi/RMISecurityManager " );
-        
-        assertEquals( consumer.getDeprecatedClasses().size(), 1 );
-        assertEquals( consumer.getDeprecatedMethods().size(), 0 );
-        
-        Set<String> classes = consumer.getDeprecatedClasses().get( "o/a/m/p/j/its/Deprecations" );
-        assertEquals( Collections.singleton( "java/rmi/RMISecurityManager" ), classes );
+    public void testDeprecatedClass() {
+        consumer.consumeLine("class o/a/m/p/j/its/Deprecations uses deprecated class java/rmi/RMISecurityManager ");
+
+        assertEquals(consumer.getDeprecatedClasses().size(), 1);
+        assertEquals(consumer.getDeprecatedMethods().size(), 0);
+
+        Set<String> classes = consumer.getDeprecatedClasses().get("o/a/m/p/j/its/Deprecations");
+        assertEquals(Collections.singleton("java/rmi/RMISecurityManager"), classes);
     }
 
     @Test
-    public void testDeprecatedMethod()
-    {
-        consumer.consumeLine( "class o/a/m/p/j/its/Deprecations uses deprecated method java/lang/Boolean::<init>(Z)V" );
-        
-        assertEquals( consumer.getDeprecatedClasses().size(), 0 );
-        assertEquals( consumer.getDeprecatedMethods().size(), 1 );
-        
-        Set<String> methods = consumer.getDeprecatedMethods().get( "o/a/m/p/j/its/Deprecations" );
-        assertEquals( Collections.singleton( "java/lang/Boolean::<init>(Z)V" ), methods );
+    public void testDeprecatedMethod() {
+        consumer.consumeLine("class o/a/m/p/j/its/Deprecations uses deprecated method java/lang/Boolean::<init>(Z)V");
+
+        assertEquals(consumer.getDeprecatedClasses().size(), 0);
+        assertEquals(consumer.getDeprecatedMethods().size(), 1);
+
+        Set<String> methods = consumer.getDeprecatedMethods().get("o/a/m/p/j/its/Deprecations");
+        assertEquals(Collections.singleton("java/lang/Boolean::<init>(Z)V"), methods);
     }
 }
