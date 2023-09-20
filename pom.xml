@@ -25,8 +25,8 @@ under the License.
   <parent>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-plugins</artifactId>
-    <version>34</version>
-    <relativePath>../../pom/maven/maven-plugins/pom.xml</relativePath>
+    <version>39</version>
+    <relativePath />
   </parent>
 
   <artifactId>maven-jdeprscan-plugin</artifactId>
@@ -40,7 +40,7 @@ under the License.
   <prerequisites>
     <maven>${mavenVersion}</maven>
   </prerequisites>
-  
+
   <scm>
     <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-jdeprscan-plugin.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-jdeprscan-plugin.git</developerConnection>
@@ -67,7 +67,7 @@ under the License.
     <javaVersion>8</javaVersion>
     <project.build.outputTimestamp>2020-04-07T21:04:00Z</project.build.outputTimestamp>
   </properties>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
@@ -100,7 +100,7 @@ under the License.
       <artifactId>commons-lang3</artifactId>
       <version>3.5</version>
     </dependency>
-    
+
     <!-- TEST -->
     <dependency>
       <groupId>junit</groupId>
@@ -109,7 +109,7 @@ under the License.
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
+
   <profiles>
     <profile>
       <id>run-its</id>
