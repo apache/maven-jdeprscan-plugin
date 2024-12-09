@@ -31,6 +31,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.jdeprscan.consumers.JDeprScanConsumer;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.toolchain.ToolchainManager;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 import org.codehaus.plexus.util.cli.Commandline;
@@ -65,6 +66,10 @@ public abstract class BaseJDeprScanMojo extends AbstractJDeprScanMojo {
     private String release;
 
     private final JDeprScanConsumer consumer = new JDeprScanConsumer();
+
+    protected BaseJDeprScanMojo(ToolchainManager toolchainManager) {
+        super(toolchainManager);
+    }
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
