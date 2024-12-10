@@ -56,23 +56,22 @@ public abstract class AbstractJDeprScanMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        String jExecutable;
         try {
-            jExecutable = getJDeprScanExecutable();
+            String jExecutable = getJDeprScanExecutable();
+
+            // Synopsis
+            // jdeprscan [options] {dir|jar|class} ...
+            Commandline cmd = new Commandline();
+            cmd.setExecutable(jExecutable);
+
+            addJDeprScanOptions(cmd);
+
+            executeJDeprScanCommandLine(cmd, getConsumer());
+
+            verify();
         } catch (IOException e) {
             throw new MojoFailureException("Unable to find jdeprscan command: " + e.getMessage(), e);
         }
-
-        // Synopsis
-        // jdeprscan [options] {dir|jar|class} ...
-        Commandline cmd = new Commandline();
-        cmd.setExecutable(jExecutable);
-
-        addJDeprScanOptions(cmd);
-
-        executeJDeprScanCommandLine(cmd, getConsumer());
-
-        verify();
     }
 
     protected CommandLineUtils.StringStreamConsumer getConsumer() {
@@ -168,11 +167,13 @@ public abstract class AbstractJDeprScanMojo extends AbstractMojo {
         try {
             int exitCode = CommandLineUtils.executeCommandLine(cmd, out, err);
 
-            String output = (StringUtils.isEmpty(out.getOutput())
-                    ? null
-                    : '\n' + out.getOutput().trim());
+            String output = out.getOutput();
+            if (output != null) {
+                output = '\n' + out.getOutput().trim();
+            }
+            // at this point output is null or non-empty
 
-            if (StringUtils.isNotEmpty(output)) {
+            if (output != null) {
                 getLog().info(output);
             }
 
