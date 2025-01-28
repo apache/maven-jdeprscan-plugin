@@ -169,12 +169,7 @@ public abstract class AbstractJDeprScanMojo extends AbstractMojo {
 
             String output = out.getOutput();
             if (output != null) {
-                output = '\n' + out.getOutput().trim();
-            }
-            // at this point output is null or non-empty
-
-            if (output != null) {
-                getLog().info(output);
+                getLog().info('\n' + out.getOutput().trim());
             }
 
             if (exitCode != 0) {
