@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
 # https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#modifying-maven-toolchains
       - name: Install Toolchain JDK
