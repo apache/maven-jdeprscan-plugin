@@ -26,31 +26,31 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JDeprScanConsumerTest {
+class JDeprScanConsumerTest {
     private JDeprScanConsumer consumer;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         consumer = new JDeprScanConsumer();
     }
 
     @Test
-    void testDeprecatedClass() {
+    void deprecatedClass() {
         consumer.consumeLine("class o/a/m/p/j/its/Deprecations uses deprecated class java/rmi/RMISecurityManager ");
 
-        assertEquals(consumer.getDeprecatedClasses().size(), 1);
-        assertEquals(consumer.getDeprecatedMethods().size(), 0);
+        assertEquals(1, consumer.getDeprecatedClasses().size());
+        assertEquals(0, consumer.getDeprecatedMethods().size());
 
         Set<String> classes = consumer.getDeprecatedClasses().get("o/a/m/p/j/its/Deprecations");
         assertEquals(Collections.singleton("java/rmi/RMISecurityManager"), classes);
     }
 
     @Test
-    void testDeprecatedMethod() {
+    void deprecatedMethod() {
         consumer.consumeLine("class o/a/m/p/j/its/Deprecations uses deprecated method java/lang/Boolean::<init>(Z)V");
 
-        assertEquals(consumer.getDeprecatedClasses().size(), 0);
-        assertEquals(consumer.getDeprecatedMethods().size(), 1);
+        assertEquals(0, consumer.getDeprecatedClasses().size());
+        assertEquals(1, consumer.getDeprecatedMethods().size());
 
         Set<String> methods = consumer.getDeprecatedMethods().get("o/a/m/p/j/its/Deprecations");
         assertEquals(Collections.singleton("java/lang/Boolean::<init>(Z)V"), methods);
