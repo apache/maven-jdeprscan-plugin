@@ -30,7 +30,7 @@ import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.StreamConsumer;
 
 /**
- * Consumes output of jdeprscan tool
+ * Consumes output of jdeprscan tool.
  *
  * @author Robert Scholte
  * @since 3.0.0
