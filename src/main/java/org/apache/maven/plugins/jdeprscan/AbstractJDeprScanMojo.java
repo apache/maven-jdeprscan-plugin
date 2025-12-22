@@ -41,7 +41,7 @@ import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
 
 /**
- * Abstract class for all mojos
+ * Abstract class for all mojos.
  *
  * @author Robert Scholte
  * @since 3.0.0

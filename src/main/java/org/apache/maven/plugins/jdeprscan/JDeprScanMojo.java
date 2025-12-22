@@ -34,7 +34,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.toolchain.ToolchainManager;
 
 /**
- * Scans main classes with jdeprscan tool
+ * Scans main classes with jdeprscan tool.
  *
  * @author Robert Scholte
  * @since 3.0.0

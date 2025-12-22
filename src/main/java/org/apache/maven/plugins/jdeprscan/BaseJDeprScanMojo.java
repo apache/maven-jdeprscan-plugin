@@ -37,7 +37,7 @@ import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 import org.codehaus.plexus.util.cli.Commandline;
 
 /**
- * Base class for all explicit jdeprscan mojos
+ * Base class for all explicit jdeprscan mojos.
  *
  * @author Robert Scholte
  * @since 3.0.0
