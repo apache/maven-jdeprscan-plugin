@@ -24,6 +24,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -32,7 +33,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.jdeprscan.consumers.JDeprScanConsumer;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.toolchain.ToolchainManager;
-import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 import org.codehaus.plexus.util.cli.Commandline;
 
@@ -109,8 +109,8 @@ public abstract class BaseJDeprScanMojo extends AbstractJDeprScanMojo {
 
             if (!cp.isEmpty()) {
                 cmd.createArg().setValue("--class-path");
-
-                cmd.createArg().setValue(StringUtils.join(cp.iterator(), File.pathSeparator));
+                String classpath = cp.stream().map(Path::toString).collect(Collectors.joining(File.pathSeparator));
+                cmd.createArg().setValue(classpath);
             }
 
         } catch (DependencyResolutionRequiredException e) {
