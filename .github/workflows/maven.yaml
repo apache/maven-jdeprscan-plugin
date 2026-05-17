@@ -15,40 +15,19 @@
 # specific language governing permissions and limitations
 # under the License.
 
-name: Java CI
+name: Verify
 
-on: [ push, pull_request ]
+on:
+  push:
+  pull_request:
 
 jobs:
   build:
-
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macOS-latest ]
-        java: [ 8, 11, 17, 21 ]
-      fail-fast: false
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-# https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#modifying-maven-toolchains
-      - name: Install Toolchain JDK
-        if: ${{ matrix.java == '8' }}
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'zulu'
-          java-version: 11
-          cache: 'maven'
-
-      - name: Set up JDK
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'zulu'
-          java-version: ${{ matrix.java }}
-          cache: 'maven'
-
-      - name: Build with Maven
-        run: mvn verify --errors --batch-mode --show-version -Prun-its
+    name: Verify
+    uses: apache/maven-gh-actions-shared/.github/workflows/maven-verify.yml@v4
+    with:
+      maven4-enabled: true
+      matrix-exclude: '
+        [
+          {"jdk": "8"}
+        ]'
