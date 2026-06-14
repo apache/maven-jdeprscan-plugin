@@ -19,8 +19,14 @@
  
 def buildLog = new File( basedir, 'build.log' )
 
-assert buildLog.text.contains( "class o/a/m/p/j/its/Deprecations uses deprecated class java/rmi/RMISecurityManager" )
-assert buildLog.text.contains( "class o/a/m/p/j/its/Deprecations uses deprecated method java/lang/Boolean::<init>(Z)V" )
- 
+def describeLines = buildLog.readLines()
+        .dropWhile{ !it.startsWith('class o/a/m/p/j/its/Deprecations') } // start line, inclusive
+        .takeWhile{ !it.startsWith('[') }            // end line, inclusive
+        .grep()                                               // remove empty lines
+        .collect{it} as Set
 
+assert describeLines.size() == 2
 
+for ( line in describeLines ) {
+    assert (line.trim().endsWith("java/rmi/RMISecurityManager") || line.trim().endsWith( "java/lang/Boolean::<init>(Z)V"))
+}
