@@ -70,11 +70,28 @@ public abstract class AbstractJDeprScanMojo extends AbstractMojo {
         Commandline cmd = new Commandline();
         cmd.setExecutable(jExecutable);
 
+        addFixedLocaleOptions(cmd);
+
         addJDeprScanOptions(cmd);
 
         executeJDeprScanCommandLine(cmd, getConsumer());
 
         verify();
+    }
+
+    /**
+     * Forces the forked {@code jdeprscan} JVM to a fixed English locale.
+     * <p>
+     * The tool's findings (e.g. {@code "... uses deprecated class ..."}) are
+     * localized by the JDK, but {@link org.apache.maven.plugins.jdeprscan.consumers.JDeprScanConsumer}
+     * parses them with English-only regular expressions. Without pinning the
+     * locale, a non-English default (e.g. German {@code "... verwendet die
+     * veraltete Klasse ..."}) is not recognized, so no deprecation is detected
+     * and {@code failOnWarning} never triggers. See issue #76.
+     */
+    static void addFixedLocaleOptions(Commandline cmd) {
+        cmd.createArg().setValue("-J-Duser.language=en");
+        cmd.createArg().setValue("-J-Duser.country=US");
     }
 
     protected CommandLineUtils.StringStreamConsumer getConsumer() {
