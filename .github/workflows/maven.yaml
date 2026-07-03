@@ -52,3 +52,34 @@ jobs:
 
       - name: Build with Maven
         run: mvn verify --errors --batch-mode --show-version -Prun-its
+
+  # Regression guard for issue #76: the GitHub runners all resolve to an English
+  # locale, so the default matrix above never exercises the localized jdeprscan
+  # output. Run the ITs once with a non-English default locale (Zulu ships the
+  # jdeprscan_de bundle); JAVA_TOOL_OPTIONS is picked up by every forked JVM,
+  # incl. the jdeprscan tool. With the locale pinning in AbstractJDeprScanMojo
+  # this stays green; without it the release8/9 ITs fail.
+  build-non-english-locale:
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu'
+          java-version: 21
+          cache: 'maven'
+
+      - name: Build with Maven (German default locale)
+        env:
+          JAVA_TOOL_OPTIONS: -Duser.language=de -Duser.country=DE
+        run: mvn verify --errors --batch-mode --show-version -Prun-its
