@@ -52,6 +52,14 @@ jobs:
 
       - name: Build with Maven
         run: mvn verify --errors --batch-mode --show-version -Prun-its
+        with:
+          maven4-enabled: true
+          matrix-exclude: '
+            [
+              {"jdk": "8"}
+            ]'
+
+
 
   # Regression guard for issue #76: the GitHub runners all resolve to an English
   # locale, so the default matrix above never exercises the localized jdeprscan
