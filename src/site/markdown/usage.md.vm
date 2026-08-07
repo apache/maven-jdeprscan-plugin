@@ -57,6 +57,6 @@ The configuration element contains the configuration for the plugin [like any ot
 Requirements
 ------------
 
-Based on the foundation of the plugin it is required to have JDK 9 installed. This means either you have it configured via **JAVA\_HOME** which means to run the whole Maven build with JDK 9 or via **Toolchains**.
+Based on the foundation of the plugin it is required to have JDK 9 installed. This means either you have it configured via **JAVA_HOME** which means to run the whole Maven build with JDK 9 or via **Toolchains**.
 
 How to configure Maven related to Toolchains can be read in the [Toolchains documentation](https://maven.apache.org/guides/mini/guide-using-toolchains.html).
