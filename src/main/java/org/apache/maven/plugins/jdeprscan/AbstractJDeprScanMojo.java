@@ -109,6 +109,7 @@ public abstract class AbstractJDeprScanMojo extends AbstractMojo {
     }
 
     private String getJDeprScanExecutable() throws IOException {
+
         Toolchain tc = getToolchain();
 
         String jdeprscanExecutable = null;
@@ -117,7 +118,6 @@ public abstract class AbstractJDeprScanMojo extends AbstractMojo {
         }
 
         String jdepsCommand = "jdeprscan" + (SystemUtils.IS_OS_WINDOWS ? ".exe" : "");
-
         File jdeprscanExe;
 
         if (StringUtils.isNotEmpty(jdeprscanExecutable)) {
@@ -145,11 +145,14 @@ public abstract class AbstractJDeprScanMojo extends AbstractMojo {
         // Try to find jdepsExe from JAVA_HOME environment variable
         // ----------------------------------------------------------------------
         if (!jdeprscanExe.exists() || !jdeprscanExe.isFile()) {
+
             Properties env = CommandLineUtils.getSystemEnvVars();
             String javaHome = env.getProperty("JAVA_HOME");
+
             if (StringUtils.isEmpty(javaHome)) {
-                throw new IOException("The environment variable JAVA_HOME is not correctly set.");
+                return jdepsCommand;
             }
+
             if ((!new File(javaHome).getCanonicalFile().exists())
                     || (new File(javaHome).getCanonicalFile().isFile())) {
                 throw new IOException("The environment variable JAVA_HOME=" + javaHome
@@ -164,7 +167,6 @@ public abstract class AbstractJDeprScanMojo extends AbstractMojo {
             throw new IOException("The jdeps executable '" + jdeprscanExe
                     + "' doesn't exist or is not a file. Verify the JAVA_HOME environment variable.");
         }
-
         return jdeprscanExe.getAbsolutePath();
     }
 
