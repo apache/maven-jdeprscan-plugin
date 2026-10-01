@@ -20,10 +20,8 @@ package org.apache.maven.plugins.jdeprscan;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -233,22 +231,12 @@ public abstract class AbstractJDeprScanMojo extends AbstractMojo {
             tc = toolchainManager.getToolchainFromBuildContext("jdk", session);
 
             if (tc == null) {
-                // Maven 3.3.0 has plugin execution scoped Toolchain Support
-                try {
-                    Method getToolchainsMethod = toolchainManager
-                            .getClass()
-                            .getMethod("getToolchains", MavenSession.class, String.class, Map.class);
+                List<Toolchain> tcs =
+                        toolchainManager.getToolchains(session, "jdk", Collections.singletonMap("version", "[9,)"));
 
-                    @SuppressWarnings("unchecked")
-                    List<Toolchain> tcs = (List<Toolchain>) getToolchainsMethod.invoke(
-                            toolchainManager, session, "jdk", Collections.singletonMap("version", "[9,)"));
-
-                    if (tcs != null && tcs.size() > 0) {
-                        // pick up latest, jdeps of JDK9 has more options compared to JDK8
-                        tc = tcs.get(tcs.size() - 1);
-                    }
-                } catch (ReflectiveOperationException | SecurityException | IllegalArgumentException e) {
-                    // ignore
+                if (tcs != null && tcs.size() > 0) {
+                    // pick up latest, jdeps of JDK9 has more options compared to JDK8
+                    tc = tcs.get(tcs.size() - 1);
                 }
             }
         }
