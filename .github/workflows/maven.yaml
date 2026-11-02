@@ -21,45 +21,14 @@ on: [ push, pull_request ]
 
 jobs:
   build:
-
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macOS-latest ]
-        java: [ 8, 11, 17, 21 ]
-      fail-fast: false
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-# https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#modifying-maven-toolchains
-      - name: Install Toolchain JDK
-        if: ${{ matrix.java == '8' }}
-        uses: actions/setup-java@v6
-        with:
-          distribution: 'zulu'
-          java-version: 11
-          cache: 'maven'
-
-      - name: Set up JDK
-        uses: actions/setup-java@v6
-        with:
-          distribution: 'zulu'
-          java-version: ${{ matrix.java }}
-          cache: 'maven'
-
-      - name: Build with Maven
-        run: mvn verify --errors --batch-mode --show-version -Prun-its
-        with:
-          maven4-enabled: true
-          matrix-exclude: '
-            [
-              {"jdk": "8"}
-            ]'
-
-
+    name: Verify
+    uses: apache/maven-gh-actions-shared/.github/workflows/maven-verify.yml@v5
+    with:
+      maven4-enabled: true
+      matrix-exclude: '
+        [
+          {"jdk": "8"}
+        ]'
 
   # Regression guard for issue #76: the GitHub runners all resolve to an English
   # locale, so the default matrix above never exercises the localized jdeprscan
