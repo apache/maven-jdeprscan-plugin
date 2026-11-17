@@ -187,9 +187,9 @@ public abstract class AbstractJDeprScanMojo extends AbstractMojo {
         try {
             int exitCode = CommandLineUtils.executeCommandLine(cmd, out, err);
 
-            String output = (StringUtils.isEmpty(out.getOutput())
+            String output = StringUtils.isEmpty(out.getOutput())
                     ? null
-                    : '\n' + out.getOutput().trim());
+                    : '\n' + out.getOutput().trim();
 
             if (StringUtils.isNotEmpty(output)) {
                 getLog().info(output);
@@ -236,7 +236,7 @@ public abstract class AbstractJDeprScanMojo extends AbstractMojo {
                 List<Toolchain> tcs =
                         toolchainManager.getToolchains(session, "jdk", Collections.singletonMap("version", "[9,)"));
 
-                if (tcs != null && tcs.size() > 0) {
+                if (tcs != null && !tcs.isEmpty()) {
                     // pick up latest, jdeps of JDK9 has more options compared to JDK8
                     tc = tcs.get(tcs.size() - 1);
                 }
