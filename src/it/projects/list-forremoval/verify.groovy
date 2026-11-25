@@ -16,11 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
- 
-def buildLog = new File( basedir, 'build.log' )
+
+def buildLog = new File(basedir, 'build.log')
 
 def deprLines = buildLog.readLines().findAll { it =~ /^@Deprecated/ }
 assert !deprLines.isEmpty()
- 
-def frLines = deprLines.findAll { it =~ /forRemoval=true/  }
+
+def frLines = deprLines.findAll { it =~ /forRemoval=true/ }
 assert deprLines.size() == frLines.size()
