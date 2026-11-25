@@ -16,11 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
- 
-def buildLog = new File( basedir, 'build.log' )
 
-assert buildLog.text.contains( "class o/a/m/p/j/its/Deprecations uses deprecated class java/rmi/RMISecurityManager" )
-assert buildLog.text.contains( "class o/a/m/p/j/its/Deprecations uses deprecated method java/lang/Boolean::<init>(Z)V" )
- 
+def buildLog = new File(basedir, 'build.log')
+
+assert buildLog.text.contains("class o/a/m/p/j/its/Deprecations uses deprecated class java/rmi/RMISecurityManager")
+assert buildLog.text.contains("class o/a/m/p/j/its/Deprecations uses deprecated method java/lang/Boolean::<init>(Z)V")
+
 
 
